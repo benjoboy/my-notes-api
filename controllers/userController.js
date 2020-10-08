@@ -58,6 +58,8 @@ module.exports = {
           error: err.message,
         });
       }
+      req.session.userId = user._id;
+      req.session.username = req.body.username;
       return res.status(201).json(user);
     });
   },
@@ -82,7 +84,8 @@ module.exports = {
       } else {
         req.session.userId = user._id;
         req.session.username = req.body.username;
-        return res.redirect("profile");
+        console.log(req.session.userId);
+        return res.status(201).json(user);
       }
     });
   },
@@ -91,15 +94,17 @@ module.exports = {
    */
 
   logout: function (req, res, next) {
-    if (req.session) {
+    if (req.session.userId) {
       // delete session object
       req.session.destroy(function (err) {
         if (err) {
           return next(err);
         } else {
-          return res.redirect("/");
+          return res.status(200).json({ info: "user is logged out" });
         }
       });
+    } else {
+      return res.status(200).json({ info: "user is already logged out" });
     }
   },
   /**
@@ -170,5 +175,23 @@ module.exports = {
       }
       return res.status(204).json();
     });
+  },
+
+  loggedIn: function (req, res) {
+    console.log(req.session.userId);
+
+    if (req.session.userId) {
+      return res.status(200).json({
+        logged_in: true,
+        username: req.session.username,
+        userId: req.session.userId,
+      });
+    } else {
+      return res.status(200).json({
+        logged_in: false,
+        username: "",
+        userId: "",
+      });
+    }
   },
 };
