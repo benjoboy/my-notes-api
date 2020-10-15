@@ -183,14 +183,18 @@ module.exports = {
     if (req.session.userId) {
       return res.status(200).json({
         logged_in: true,
-        username: req.session.username,
-        userId: req.session.userId,
+        user: {
+          username: req.session.username,
+          userId: req.session.userId,
+        },
       });
     } else {
       return res.status(200).json({
         logged_in: false,
-        username: "",
-        userId: "",
+        user: {
+          username: "",
+          userId: "",
+        },
       });
     }
   },
