@@ -41,6 +41,7 @@ module.exports = {
           });
         }
         return res.status(201).json({
+          notebook: notebook,
           status: "created",
         });
       });
@@ -78,6 +79,7 @@ module.exports = {
         }
         return res.status(201).json({
           status: "created",
+          note: note,
         });
       }
     );
